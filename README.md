@@ -36,8 +36,8 @@ Download application and configure.
 
 ```
 sudo apt install libjpeg-dev libpng-dev python-virtualenv python3 redis-server postgresql-server postgresql-server-dev-*
-git clone https://github.com/skftn/wownero-wfs.git
-cd wownero-wfs
+git clone https://git.wownero.com/wownero/wownero-funding-system.git
+cd wownero-funding-system
 virtualenv -p /usr/bin/python3
 source venv/bin/activate
 pip uninstall pillow
