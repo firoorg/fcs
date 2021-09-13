@@ -13,6 +13,18 @@ Example
 
 Good luck with trying to get this to run! Some pointers:
 
+
+#### Install Wownero
+https://github.com/wownero-project/wownero
+```bash
+git clone https://github.com/wownero-project/wownero.git
+  sudo apt update && sudo apt install build-essential cmake pkg-config libboost-all-dev libssl-dev libzmq3-dev libunbound-dev libsodium-dev libunwind8-dev liblzma-dev libreadline6-dev libldns-dev libexpat1-dev libpgm-dev libhidapi-dev libusb-1.0-0-dev libprotobuf-dev protobuf-compiler libudev-dev git -y
+  git clone https://git.wownero.com/wownero/wownero && cd wownero
+  make -j$(nproc)
+```
+find the binaries and then run the wallet cli, and create a wallet.
+
+
 #### Daemon
 
 First make sure the daemon is up.
@@ -26,8 +38,12 @@ First make sure the daemon is up.
 Expose wallet via RPC.
 
 ```bash
-./wownero-wallet-rpc --rpc-bind-port 45678 --disable-rpc-login --wallet-file wfs --password ""
+./wownero-wallet-rpc --rpc-bind-port 45678 --disable-rpc-login --wallet-file yourwallet --password ""
 ```
+
+#### Install postgres
+https://tecadmin.net/how-to-install-postgresql-in-ubuntu-20-04/
+step 1 through step 3
 
 
 #### Web application
@@ -35,19 +51,22 @@ Expose wallet via RPC.
 Download application and configure.
 
 ```
-sudo apt install libjpeg-dev libpng-dev python-virtualenv python3 redis-server postgresql-server postgresql-server-dev-*
+
+sudo apt install libjpeg-dev libpng-dev python3 redis-server postgresql-server-dev-*
+sudo apt install python3-virtualenv
+sudo apt install python3.8-venv
 git clone https://git.wownero.com/wownero/wownero-funding-system.git
 cd wownero-funding-system
-virtualenv -p /usr/bin/python3
-source venv/bin/activate
+python3 -m venv yourvirtualenviornment
+source yourvirtualenviornment/bin/activate
 pip uninstall pillow
+pip install wheel
 pip install -r requirements.txt
 CC="cc -mavx2" pip install -U --force-reinstall pillow-simd
 cp settings.py_example settings.py
 - change settings accordingly
 ```
-
-Prepare a database in postgres and create an user for it.
+eg change the psql_pass to your database password, psql_db to your database name
 
 Run the application:
 
