@@ -14,39 +14,43 @@ Example
 Good luck with trying to get this to run! Some pointers:
 
 
-#### Install Wownero
-https://github.com/wownero-project/wownero
-```bash
-git clone https://github.com/wownero-project/wownero.git
-  sudo apt update && sudo apt install build-essential cmake pkg-config libboost-all-dev libssl-dev libzmq3-dev libunbound-dev libsodium-dev libunwind8-dev liblzma-dev libreadline6-dev libldns-dev libexpat1-dev libpgm-dev libhidapi-dev libusb-1.0-0-dev libprotobuf-dev protobuf-compiler libudev-dev git -y
-  git clone https://git.wownero.com/wownero/wownero && cd wownero
-  make -j$(nproc)
-```
-find the binaries and then run the wallet cli, and create a wallet.
+### How to install Firo Wallet/Node on Ubuntu
+
+#### Download and unzip last release 
+
+<code>wget https://github.com/firoorg/firo/releases/download/v0.14.8.0/firo-0.14.8.0-linux64.tar.gz | tar -xvf</code>
+
+#### Send files to binary folder
+
+<code>cd firo-0.14.8; cp bin/* /usr/local/bin</code>
+
+#### Create config file
+nano /root/.firo/firo.config
+
+<pre>
+#----
+rpcuser=user
+rpcpassword=password
+rpcallowip=127.0.0.1
+rpcport=8332
+#----
+listen=1
+server=1
+daemon=1
+logtimestamps=1
+txindex=1
+</pre>
+
+#### Run node as daemon with systemctl
+https://github.com/firoorg/firo/wiki/Configuring-masternode-with-systemd
 
 
-#### Daemon
-
-First make sure the daemon is up.
-
-```bash
-./wownerod --max-concurrency 4
-```
-
-#### Wallet RPC
-
-Expose wallet via RPC.
-
-```bash
-./wownero-wallet-rpc --rpc-bind-port 45678 --disable-rpc-login --wallet-file yourwallet --password ""
-```
-
-#### Install postgres
+### Install postgres
 https://tecadmin.net/how-to-install-postgresql-in-ubuntu-20-04/
 step 1 through step 3
 
 
-#### Web application
+### Web application
 
 Download application and configure.
 
@@ -103,4 +107,4 @@ UPDATE users SET admin = TRUE WHERE user_id = your_number;
 
 ### License
 
-© 2018 WTFPL – Do What the Fuck You Want to Public License
+© 2021 WTFPL – Do What the Fuck You Want to Public License
