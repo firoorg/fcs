@@ -11,6 +11,8 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.types import Float
 from sqlalchemy_json import MutableJson
 
+import json
+
 import settings
 from funding.factory import db, cache
 
@@ -80,6 +82,25 @@ class User(db.Model):
             db.session.rollback()
             raise
 
+def getTransaction(txid):
+    """This function retrieves the transaction from the blockchain"""
+    try:
+        url = f'http://{settings.RPC_HOST}:{settings.RPC_PORT}/'
+        payload = json.dumps({"method": "gettransaction", "params": [f"{txid}"]})
+        headers = {'content-type': "application/json"}
+        rpc_user = f'{settings.RPC_USERNAME}'
+        rpc_password = f'{settings.RPC_PASSWORD}'
+        r = requests.request("POST", url, data=payload, headers=headers, auth=(rpc_user, rpc_password))
+        r.raise_for_status()
+        blob = r.json()
+        print(blob)
+
+        assert 'result' in blob
+        assert 'amount' in blob['result']
+    except Exception as ex:
+        print("errorTransaction")
+        return -1.0
+    return blob['result']['amount']
 
 class Proposal(db.Model):
     __tablename__ = "proposals"
@@ -210,31 +231,45 @@ class Proposal(db.Model):
             return rtn
 
         try:
-            r = requests.get(f'http://{settings.RPC_HOST}:{settings.RPC_PORT}/json_rpc', json={
-                "jsonrpc": "2.0",
-                "id": "0",
-                "method": "get_payments",
-                "params": {
-                    "payment_id": self.payment_id
-                }
-            })
+            url = f'http://{settings.RPC_HOST}:{settings.RPC_PORT}/'
+            payload = json.dumps({"method": "listreceivedbyaddress"})
+            headers = {'content-type': "application/json"}
+            rpc_user = f'{settings.RPC_USERNAME}'
+            rpc_password = f'{settings.RPC_PASSWORD}'
+            r = requests.request("POST", url, data=payload, headers=headers, auth=(rpc_user, rpc_password))
             r.raise_for_status()
             blob = r.json()
 
             assert 'result' in blob
-            assert 'payments' in blob['result']
-            assert isinstance(blob['result']['payments'], list)
+            assert 'address' in blob['result'][0]
+            assert 'amount' in blob['result'][0]
+            assert 'txids' in blob['result'][0]
+            assert isinstance(blob['result'][0]['txids'], list)
         except Exception as ex:
             return rtn
 
-        txs = blob['result']['payments']
-        for tx in txs:
-            tx['amount_human'] = float(tx['amount'])/1e11
-            tx['txid'] = tx['tx_hash']
-            tx['type'] = 'in'
+        # Find the relavent address balance.
+        result = blob['result']
+        desireAddressBalance = ""
+        txs = []
+        for addressBalance in result:
+            if addressBalance['address'] == self.payment_id:
+                desireAddressBalance = addressBalance
+                break
+        
+        if desireAddressBalance == "":
+            return rtn
+
+        for txid in desireAddressBalance['txids']:
+            txsid_ = {}
+            txsid_['amount'] = getTransaction(txid)
+            txsid_['amount_human'] = float(txsid_['amount'])
+            txsid_['txid'] = txid
+            txsid_['type'] = 'in'
+            txs.append(txsid_)
 
         data = {
-            'sum': sum([float(z['amount']) / 1e11 for z in txs]),
+            'sum': desireAddressBalance['amount'],
             'txs': txs
         }
 

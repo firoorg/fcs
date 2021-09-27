@@ -78,6 +78,25 @@ Beware `run_dev.py` is meant as a development server.
 
 When running behind nginx/apache, inject `X-Forwarded-For`.
 
+### Setting Up Admins
+go into your postgres user then
+```
+// substitute postgres with whatever username you set up in the postgres step
+sudo su - postgres
+psql
+```
+
+select your database
+```
+\dt
+\c yourdatabasename
+```
+
+find the user_id of the user you want to turn into an admin, then do:
+```
+SELECT * FROM users;
+UPDATE users SET admin = TRUE WHERE user_id = your_number;
+```
 ### Contributors
 
 - [camthegeek](https://github.com/camthegeek)

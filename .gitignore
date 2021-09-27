@@ -5,3 +5,4 @@ settings.py
 htmlcov
 .coverage
 funding/static/qr/*
+yourvirtualenviornment/

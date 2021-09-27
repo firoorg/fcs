@@ -6,6 +6,7 @@ from flask import request, redirect, render_template, url_for, flash, make_respo
 from flask_login import login_user , logout_user , current_user
 from dateutil.parser import parse as dateutil_parse
 from flask_yoloapi import endpoint, parameter
+import json
 
 import settings
 from funding.factory import app, db, cache
@@ -171,22 +172,22 @@ def proposal_api_add(title, content, pid, funds_target, addr_receiving, category
 
         # generate integrated address
         try:
-            r = requests.get(f'http://{settings.RPC_HOST}:{settings.RPC_PORT}/json_rpc', json={
-                "jsonrpc": "2.0",
-                "id": "0",
-                "method": "make_integrated_address"
-            })
+            url = f'http://{settings.RPC_HOST}:{settings.RPC_PORT}/'
+            payload = json.dumps({"method": "getnewaddress"})
+            headers = {'content-type': "application/json"}
+            rpc_user = f'{settings.RPC_USERNAME}'
+            rpc_password = f'{settings.RPC_PASSWORD}'
+            r = requests.request("POST", url, data=payload, headers=headers, auth=(rpc_user, rpc_password))
             r.raise_for_status()
             blob = r.json()
 
             assert 'result' in blob
-            assert 'integrated_address' in blob['result']
-            assert 'payment_id' in blob['result']
         except Exception as ex:
             raise
 
-        p.addr_donation = blob['result']['integrated_address']
-        p.payment_id = blob['result']['payment_id']
+        p.addr_donation = blob['result']
+        p.payment_id = blob['result']
+
 
         db.session.add(p)
 

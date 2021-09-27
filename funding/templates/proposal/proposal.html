@@ -35,7 +35,7 @@
                 {% if proposal.status <= 1 %}
                 <br>
                 <span>
-                    Target: <b>{{proposal.funds_target|round}}</b> WOW
+                    Target: <b>{{proposal.funds_target|round}}</b> FIRO
                      {% if proposal.funds_target_usd %}
                     <small>➞ {{proposal.funds_target_usd}} USD</small>
                     {% endif %}
@@ -64,7 +64,7 @@
                                             <tr>
                                                 <td>Target</td>
                                                 <td>
-                                                    <span class="badge">{{proposal.funds_target|round}} WOW
+                                                    <span class="badge">{{proposal.funds_target|round}} FIRO
                                                      {% if proposal.funds_target_usd %}
                                                     <small>➞ {{proposal.funds_target_usd}} USD</small>
                                                     {% endif %}
@@ -94,14 +94,14 @@
                                     <hr>
                                 </div>
                                 <div class="col-lg-8">
-                                    {{proposal.balance['available']|round(3) or 0 }} WOW Raised
+                                    {{proposal.balance['available']|round(3) or 0 }} FIRO Raised
                                     {% set remaining = proposal.funds_target - proposal.balance['available']|float|round(3) %}
 
                                     <small>
                                     {% if remaining > 0 %}
-                                        ({{ (proposal.funds_target - proposal.balance['available']|float|round(3)|int) }} WOW until goal)
+                                        ({{ (proposal.funds_target - proposal.balance['available']|float|round(3)|int) }} FIRO until goal)
                                     {% elif remaining < 0 %}
-                                        ({{ (proposal.balance['available']-proposal.funds_target|float|round(3)|int) }} WOW past goal!)
+                                        ({{ (proposal.balance['available']-proposal.funds_target|float|round(3)|int) }} FIRO past goal!)
                                     {% endif %}
                                     </small>
 
@@ -115,7 +115,7 @@
 
                                 <br/>
                                 <div class="col-lg-8">
-                                    {{ proposal.spends['amount'] }} WOW Paid out <small>({{ proposal.spends['pct']|round(1) }}%)</small>
+                                    {{ proposal.spends['amount'] }} FIRO Paid out <small>({{ proposal.spends['pct']|round(1) }}%)</small>
                                     <div class="progress">
                                         <!-- @todo: spends remaining pct -->
                                         <div class="progress-bar progress-warning progress-bar" style="width: {{ proposal.spends['pct'] }}%;">
@@ -124,7 +124,7 @@
                                     <hr>
                                 </div>
                                 <div class="col-lg-8">
-                                    {{ (proposal.balance['available']-proposal.spends['amount']) |round(3) or 0}} WOW Available for payout :-)
+                                    {{ (proposal.balance['available']-proposal.spends['amount']) |round(3) or 0}} FIRO Available for payout :-)
                                     <div class="progress">
                                         <div class="progress-bar progress-warning progress-bar" style="width: {{proposal.balance['remaining_pct']}}%;">
                                         </div>

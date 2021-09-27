@@ -62,13 +62,12 @@ def price_cmc_btc_usd():
     except:
         return
 
-
 def coin_btc_value():
     headers = {'User-Agent': 'Mozilla/5.0 (Android 4.4; Mobile; rv:41.0) Gecko/41.0 Firefox/41.0'}
     try:
-        r = requests.get('https://tradeogre.com/api/v1/ticker/BTC-WOW', headers=headers)
+        r = requests.get('https://api.binance.com/api/v3/ticker/price?symbol=FIROBTC', headers=headers)
         r.raise_for_status()
-        return float(r.json().get('high'))
+        return float(r.json().get('price'))
     except:
         return
 
