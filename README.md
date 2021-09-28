@@ -13,6 +13,8 @@ Example
 
 Good luck with trying to get this to run! Some pointers:
 
+Make sure you have a machine with about 100GB of space.
+
 
 ### How to install Firo Wallet/Node on Ubuntu
 
@@ -23,6 +25,9 @@ Good luck with trying to get this to run! Some pointers:
 #### Send files to binary folder
 
 <code>cd firo-0.14.8; cp bin/* /usr/local/bin</code>
+```
+firo-cli help
+```
 
 #### Create config file
 nano /root/.firo/firo.config
@@ -46,6 +51,10 @@ https://github.com/firoorg/firo/wiki/Configuring-masternode-with-systemd
 
 
 ### Install postgres
+```
+sudo apt install aptitude
+sudo aptitude install postgresql postgresql-contrib
+```
 https://tecadmin.net/how-to-install-postgresql-in-ubuntu-20-04/
 step 1 through step 3
 
