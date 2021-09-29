@@ -113,4 +113,4 @@ UPDATE users SET admin = TRUE WHERE user_id = your_number;
 
 ### License
 
-© 2021 WTFPL – Do What the Fuck You Want to Public License
+© 2022 WTFPL – Do What the Fuck You Want to Public License
