@@ -247,7 +247,13 @@ def proposals(status, page, cat):
     try:
         if not isinstance(status, int):
             status = 1
-        proposals = Proposal.find_by_args(status=status, cat=cat)
+        
+        proposals = {
+            'proposed': Proposal.find_by_args(status=1, cat=cat),
+            'funding': Proposal.find_by_args(status=2, cat=cat),
+            'wip': Proposal.find_by_args(status=3, cat=cat),
+            'completed': Proposal.find_by_args(status=4, cat=cat)}
+        return make_response(render_template('proposal/overview.html', proposals=proposals))
     except:
         return make_response(redirect(url_for('proposals')))
 
