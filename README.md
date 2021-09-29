@@ -1,13 +1,11 @@
-# Wownero Funding System
-
-![whoop](https://i.imgur.com/xVS3UGq.png)
+# Firo Funding System
 
 A simple Flask application for managing donations.
 
 Example
 -------
 
-[https://funding.wownero.com](https://funding.wownero.com)
+[https://fcs.firo.org](https://fcs.firo.org)
 
 ## Installation
 

@@ -26,7 +26,7 @@ def api_proposals_get(status, cat, limit, offset):
     return [p.json for p in proposals]
 
 
-@app.route('/api/1/convert/wow-usd')
+@app.route('/api/1/convert/firo-usd')
 @endpoint.api(
     parameter('amount', type=int, location='args', required=True)
 )
@@ -66,53 +66,3 @@ def api_qr_generate(address):
             raise Exception('Could not create QR code')
 
     return send_from_directory('static/qr', '%s.png' % address)
-
-
-@app.route('/api/1/wowlite')
-@endpoint.api(
-    parameter('version', type=str, location='args', required=True)
-)
-@cache.cached(timeout=600 * 6, make_cache_key=lambda version: f"api_wowlight_version_check_{version}")
-def api_wowlight_version_check(version: str) -> bool:
-    """
-    Checks incoming wow-lite wallet version, returns False when the version is too old and needs to be upgraded.
-    :param version:
-    :return: bool
-    """
-    url = "https://raw.githubusercontent.com/wownero/wow-lite-wallet/master/src/renderer/components/Landing/LandingPage.vue"
-    try:
-        resp = requests.get(url, headers={"User-Agent": "Mozilla 5.0"})
-        resp.raise_for_status()
-        content = resp.content.decode()
-    except:
-        return True  # default to true
-
-    # parse latest version
-    current = next(re.finditer(r"wowlite\?version=(\d+.\d+.\d+)", content), None)
-    if not current:
-        return False
-
-    return version == current.group(1)
-
-
-# @app.route('/api/1/wow/supply')
-# @endpoint.api()
-# def api_wow_supply():
-#     from funding.factory import cache
-#     cache_key = 'wow_supply'
-#     hit = cache.get(cache_key)
-#     if hit:
-#         return float(hit.get('data', -1))
-
-#     try:
-#         resp = requests.get('http://explorer.firo.org/api/emission', headers={'User-Agent': 'WFS'})
-#         resp.raise_for_status()
-#         blob = resp.json()
-#         assert 'data' in blob
-#         assert 'coinbase' in blob['data']
-#     except:
-#         return Exception('error fetching circulating supply')
-
-#     supply = blob['data'].get('coinbase') / 100000000000
-#     cache.set(cache_key, {'data': supply}, 120)
-#     return supply

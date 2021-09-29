@@ -11,21 +11,21 @@
             </p>
             <p>
                 <ul>
-                    <li><a href="#api_convert_wow_usd">/api/1/convert/wow-usd</a></li>
+                    <li><a href="#api_convert_firo_usd">/api/1/convert/firo-usd</a></li>
                     <li><a href="#api_proposals">/api/1/proposals</a></li>
                 </ul>
             </p>
             <br>
 
-            <div class="api_container" id="api_convert_wow_usd">
-                <h5><small>GET</small> <code>/api/1/convert/wow-usd</code></h5>
+            <div class="api_container" id="api_convert_firo_usd">
+                <h5><small>GET</small> <code>/api/1/convert/firo-usd</code></h5>
                 <hr>
                 <p>
                     FIRO to USD conversion. Data from Binance and CoinMarketCap.
                 </p>
 
                 <b>Example:</b>
-                <pre>curl -vvX GET 'https://funding.wownero.com/api/1/convert/wow-usd?amount=1000'</pre>
+                <pre>curl -vvX GET 'https://fcs.firo.org/api/1/convert/firo-usd?amount=1000'</pre>
 
                 <b>Response:</b>
                 <pre>{"usd": 6.7}</pre>
@@ -46,7 +46,7 @@
                 </ul>
 
                 <b>Example:</b>
-                <pre>curl -vvX GET 'https://funding.wownero.com/api/1/proposals?offset=0&limit=1&status=2'</pre>
+                <pre>curl -vvX GET 'https://fcs.firo.org/api/1/proposals?offset=0&limit=1&status=2'</pre>
 
                 <b>Response:</b>
                 <pre>{
@@ -77,26 +77,10 @@
 
                 <b>Example:</b>
                 <br>
-                <a target="_blank" href="https://funding.wownero.com/api/1/qr?address=WW44Zvkfv76ezeFn5M4ijAdjyCe7dK48bjaFixvyJoeyP1pmkn2MbLugchM8hV6czL4hBhjnKTP4W9HfHyNUqBch2y2R4DT3v">
+                <a target="_blank" href="https://fcs.firo.org/api/1/qr?address=WW44Zvkfv76ezeFn5M4ijAdjyCe7dK48bjaFixvyJoeyP1pmkn2MbLugchM8hV6czL4hBhjnKTP4W9HfHyNUqBch2y2R4DT3v">
                     link
                 </a>
             </div>
-
-            <!-- <div class="api_container" id="api_wow_supply">
-                <h5><small>GET</small> <code>/api/1/wow/supply</code></h5>
-                <hr>
-                <p>
-                    The current total supply of WOW.
-                </p>
-
-                <b>Example:</b>
-                <pre>curl -vvX GET 'https://funding.wownero.com/api/1/wow/supply'</pre>
-
-                <b>Response:</b>
-                <pre>{
-  "data": 10456897.573388882
-}</pre>
-            </div> -->
         </div>
 
         {% include 'sidebar.html' %}

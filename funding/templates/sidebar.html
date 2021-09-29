@@ -65,6 +65,9 @@
                         <li>
                             <a href="{{ url_for('proposals', status=status, cat="design") }}">Design <small>({{summary_data['cats']['design']}})</small></a>
                         </li>
+                        <li>
+                            <a href="{{ url_for('proposals', status=status, cat="audit") }}">Audit <small>({{summary_data['cats']['audit']}})</small></a>
+                        </li>
                     </ul>
                 </div>
             </div>

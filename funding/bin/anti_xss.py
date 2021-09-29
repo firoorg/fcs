@@ -191,8 +191,7 @@ class XssHtml(HTMLParser):
 
 
 def such_xss(inp):
-    """Very ghetto anti-xss countermeasures. Possibly unsafe! :D
-    Needs testing, or a proper solution. wow."""
+    """Possibly unsafe anti-xss countermeasures!"""
     parser = XssHtml()
     parser.feed(inp)
     parser.close()

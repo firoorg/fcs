@@ -93,7 +93,6 @@ def getTransaction(txid):
         r = requests.request("POST", url, data=payload, headers=headers, auth=(rpc_user, rpc_password))
         r.raise_for_status()
         blob = r.json()
-        print(blob)
 
         assert 'result' in blob
         assert 'amount' in blob['result']
