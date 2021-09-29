@@ -11,7 +11,7 @@ Example
 
 Good luck with trying to get this to run! Some pointers:
 
-Make sure you have a machine with about 100GB of space.
+Make sure you have a machine with about 200GB of space.
 
 
 ### How to install Firo Wallet/Node on Ubuntu
@@ -54,7 +54,6 @@ sudo apt install aptitude
 sudo aptitude install postgresql postgresql-contrib
 ```
 https://tecadmin.net/how-to-install-postgresql-in-ubuntu-20-04/
-step 1 through step 3
 
 
 ### Web application
@@ -65,9 +64,9 @@ Download application and configure.
 
 sudo apt install libjpeg-dev libpng-dev python3 redis-server postgresql-server-dev-*
 sudo apt install python3-virtualenv
-sudo apt install python3.8-venv
-git clone https://git.wownero.com/wownero/wownero-funding-system.git
-cd wownero-funding-system
+sudo apt install python3-venv
+git clone https://github.com/firoorg/fcs.git
+cd fcs
 python3 -m venv yourvirtualenviornment
 source yourvirtualenviornment/bin/activate
 pip uninstall pillow
@@ -75,7 +74,7 @@ pip install wheel
 pip install -r requirements.txt
 CC="cc -mavx2" pip install -U --force-reinstall pillow-simd
 cp settings.py_example settings.py
-- change settings accordingly
+- change settings.py accordingly
 ```
 eg change the psql_pass to your database password, psql_db to your database name
 
