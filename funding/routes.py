@@ -122,7 +122,7 @@ def proposal_api_add(title, content, pid, funds_target, addr_receiving, category
     try:
         from funding.bin.anti_xss import such_xss
         content_escaped = such_xss(content)
-        html = markdown2.markdown(content_escaped, safe_mode=True)
+        html = markdown2.markdown(content_escaped, extras=["tables"], safe_mode="escape")
     except Exception as ex:
         return make_response(jsonify('markdown error'), 500)
 
