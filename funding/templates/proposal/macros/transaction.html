@@ -6,8 +6,8 @@
           soon^tm
         {% elif tx['type'] == 'out' %}
           <small>hidden</small>
-        <!-- {% else %}
-        {{tx['block_height']}} -->
+        {% else %}
+        {{tx['block_height']}}
         {% endif %}
     </span>
     <br>

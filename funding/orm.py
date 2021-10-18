@@ -103,6 +103,26 @@ def getTransaction(txid):
     return blob['result']
 
 
+def getBlockHeight(blockhash):
+    """This function retrieves the transaction from the blockchain"""
+    try:
+        url = f'http://{settings.RPC_HOST}:{settings.RPC_PORT}/'
+        payload = json.dumps({"method": "getblock", "params": [f"{blockhash}"]})
+        headers = {'content-type': "application/json"}
+        rpc_user = f'{settings.RPC_USERNAME}'
+        rpc_password = f'{settings.RPC_PASSWORD}'
+        r = requests.request("POST", url, data=payload, headers=headers, auth=(rpc_user, rpc_password))
+        r.raise_for_status()
+        blob = r.json()
+
+        assert 'result' in blob
+        assert 'height' in blob['result']
+    except Exception as ex:
+        print("errorTransaction")
+        return -1.0
+    return blob['result']['height']
+
+
 class Proposal(db.Model):
     __tablename__ = "proposals"
     id = db.Column(db.Integer, primary_key=True)
@@ -266,6 +286,7 @@ class Proposal(db.Model):
             transaction = getTransaction(txid)
             txsid_['amount'] = transaction['amount']
             txsid_['time'] = transaction['blocktime']
+            txsid_['block_height'] = getBlockHeight(transaction['blockhash'])
             txsid_['amount_human'] = float(txsid_['amount'])
             txsid_['txid'] = txid
             txsid_['type'] = 'in'
