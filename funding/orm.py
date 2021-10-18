@@ -82,6 +82,7 @@ class User(db.Model):
             db.session.rollback()
             raise
 
+
 def getTransaction(txid):
     """This function retrieves the transaction from the blockchain"""
     try:
@@ -99,7 +100,8 @@ def getTransaction(txid):
     except Exception as ex:
         print("errorTransaction")
         return -1.0
-    return blob['result']['amount']
+    return blob['result']
+
 
 class Proposal(db.Model):
     __tablename__ = "proposals"
@@ -255,17 +257,21 @@ class Proposal(db.Model):
             if addressBalance['address'] == self.payment_id:
                 desireAddressBalance = addressBalance
                 break
-        
+
         if desireAddressBalance == "":
             return rtn
 
         for txid in desireAddressBalance['txids']:
             txsid_ = {}
-            txsid_['amount'] = getTransaction(txid)
+            transaction = getTransaction(txid)
+            txsid_['amount'] = transaction['amount']
+            txsid_['time'] = transaction['blocktime']
             txsid_['amount_human'] = float(txsid_['amount'])
             txsid_['txid'] = txid
             txsid_['type'] = 'in'
             txs.append(txsid_)
+
+        txs = sorted(txs, key=lambda i: i['time'], reverse=True)
 
         data = {
             'sum': desireAddressBalance['amount'],
@@ -279,7 +285,8 @@ class Proposal(db.Model):
         prices = Summary.fetch_prices()
         for tx in data['txs']:
             if prices:
-                tx['amount_usd'] = coin_to_usd(amt=tx['amount_human'], btc_per_coin=prices['coin-btc'], usd_per_btc=prices['btc-usd'])
+                tx['amount_usd'] = coin_to_usd(amt=tx['amount_human'], btc_per_coin=prices['coin-btc'],
+                                               usd_per_btc=prices['btc-usd'])
 
         if data.get('sum', 0.0):
             data['pct'] = 100 / float(self.funds_target / data.get('sum', 0.0))
@@ -448,7 +455,8 @@ class Comment(db.Model):
             raise
 
     @classmethod
-    def add_comment(cls, pid: int, user_id: int, message: str, cid: int = None, message_id: int = None, automated=False):
+    def add_comment(cls, pid: int, user_id: int, message: str, cid: int = None, message_id: int = None,
+                    automated=False):
         from flask_login import current_user
         from funding.factory import db
         if not message:
