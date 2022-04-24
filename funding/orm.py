@@ -253,7 +253,7 @@ class Proposal(db.Model):
 
         try:
             url = f'http://{settings.RPC_HOST}:{settings.RPC_PORT}/'
-            payload = json.dumps({"method": "listreceivedbyaddress"})
+            payload = json.dumps({"method": "listtransactions"})
             headers = {'content-type': "application/json"}
             rpc_user = f'{settings.RPC_USERNAME}'
             rpc_password = f'{settings.RPC_PASSWORD}'
@@ -264,38 +264,33 @@ class Proposal(db.Model):
             assert 'result' in blob
             assert 'address' in blob['result'][0]
             assert 'amount' in blob['result'][0]
-            assert 'txids' in blob['result'][0]
-            assert isinstance(blob['result'][0]['txids'], list)
+            assert 'txid' in blob['result'][0]
         except Exception as ex:
             return rtn
 
         # Find the relavent address balance.
         result = blob['result']
-        desireAddressBalance = ""
         txs = []
+        sum = 0
         for addressBalance in result:
             if addressBalance['address'] == self.payment_id:
-                desireAddressBalance = addressBalance
-                break
+                txsid_ = {}
+                transaction = addressBalance
+                txsid_['amount'] = transaction['amount']
+                txsid_['time'] = transaction['blocktime']
+                txsid_['block_height'] = getBlockHeight(transaction['blockhash'])
+                txsid_['amount_human'] = float(txsid_['amount'])
+                txsid_['txid'] = addressBalance['txid']
+                txsid_['type'] = 'in'
+                sum = sum + float(txsid_['amount'])
 
-        if desireAddressBalance == "":
+        if len(txs) == 0:
             return rtn
-
-        for txid in desireAddressBalance['txids']:
-            txsid_ = {}
-            transaction = getTransaction(txid)
-            txsid_['amount'] = transaction['amount']
-            txsid_['time'] = transaction['blocktime']
-            txsid_['block_height'] = getBlockHeight(transaction['blockhash'])
-            txsid_['amount_human'] = float(txsid_['amount'])
-            txsid_['txid'] = txid
-            txsid_['type'] = 'in'
-            txs.append(txsid_)
 
         txs = sorted(txs, key=lambda i: i['time'], reverse=True)
 
         data = {
-            'sum': desireAddressBalance['amount'],
+            'sum': sum,
             'txs': txs
         }
 
