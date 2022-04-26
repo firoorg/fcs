@@ -283,6 +283,7 @@ class Proposal(db.Model):
                 txsid_['txid'] = addressBalance['txid']
                 txsid_['type'] = 'in'
                 sum = sum + float(txsid_['amount'])
+                txs.append(txsid_)
 
         if len(txs) == 0:
             return rtn
