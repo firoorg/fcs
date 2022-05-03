@@ -253,7 +253,7 @@ class Proposal(db.Model):
 
         try:
             url = f'http://{settings.RPC_HOST}:{settings.RPC_PORT}/'
-            payload = json.dumps({"method": "listtransactions"})
+            payload = json.dumps({"method": "listtransactions", "params": ['*', 999]})
             headers = {'content-type': "application/json"}
             rpc_user = f'{settings.RPC_USERNAME}'
             rpc_password = f'{settings.RPC_PASSWORD}'
@@ -273,7 +273,7 @@ class Proposal(db.Model):
         txs = []
         sum = 0
         for addressBalance in result:
-            if addressBalance['address'] == self.payment_id:
+            if (addressBalance['category'] == 'receive' or addressBalance['category'] == 'generate') and addressBalance['address'] == self.payment_id:
                 txsid_ = {}
                 transaction = addressBalance
                 txsid_['amount'] = transaction['amount']
